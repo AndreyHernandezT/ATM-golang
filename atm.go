@@ -152,26 +152,12 @@ func amountToTransfer(user_access Users) {
 	}
 }
 
-func verifyCredentials(user_access Users, option_case string) { //Verifica contraseña usuario
+func verifyCredentials(user_access Users) bool {
 	var password_scan string
 	fmt.Println("\nPor favor, ingresa tu contraseña:")
 	fmt.Scan(&password_scan)
 
-	if user_access.Password == password_scan {
-		switch option_case { //Realiza acción dependiendo caso
-		case "1":
-			seeBalance(user_access)
-		case "2":
-			amountWithdraw(user_access)
-		case "3":
-			amountToDeposit(user_access)
-		case "4":
-			amountToTransfer(user_access)
-		}
-	} else {
-		fmt.Println("Contraseña incorrecta, intentalo de nuevo") //Vuelve a preguntar contraseña
-		verifyCredentials(user_access, option_case)
-	}
+	return user_access.Password == password_scan
 }
 
 func menu(user_access Users) { // Funcion imprimir Menu
@@ -188,17 +174,37 @@ func menu(user_access Users) { // Funcion imprimir Menu
 
 	switch option {
 	case "1":
-		verifyCredentials(user_access, "1")
-		menu(user_access)
+		if verifyCredentials(user_access) {
+			seeBalance(user_access)
+			menu(user_access)
+		} else {
+			fmt.Println("Contraseña incorrecta, Si vuelves a fallar, se cerrará sesión") //Vuelve a preguntar contraseña
+			verifyCredentials(user_access)
+		}
 	case "2":
-		verifyCredentials(user_access, "2")
-		menu(user_access)
+		if verifyCredentials(user_access) {
+			amountWithdraw(user_access)
+			menu(user_access)
+		} else {
+			fmt.Println("Contraseña incorrecta,  Si vuelves a fallar, se cerrará sesión") //Vuelve a preguntar contraseña
+			verifyCredentials(user_access)
+		}
 	case "3":
-		verifyCredentials(user_access, "3")
-		menu(user_access)
+		if verifyCredentials(user_access) {
+			amountToDeposit(user_access)
+			menu(user_access)
+		} else {
+			fmt.Println("Contraseña incorrecta,  Si vuelves a fallar, se cerrará sesión") //Vuelve a preguntar contraseña
+			verifyCredentials(user_access)
+		}
 	case "4":
-		verifyCredentials(user_access, "4")
-		menu(user_access)
+		if verifyCredentials(user_access) {
+			amountToTransfer(user_access)
+			menu(user_access)
+		} else {
+			fmt.Println("Contraseña incorrecta,  Si vuelves a fallar, se cerrará sesión") //Vuelve a preguntar contraseña
+			verifyCredentials(user_access)
+		}
 	case "5":
 		fmt.Println("\n¡Hasta pronto!")
 	}
